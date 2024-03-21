@@ -35,8 +35,9 @@ public class ProductController { //this controller will contain all the API rela
 
     }
 
-    public void createProduct(){
-
+    @PostMapping
+    public GenericProductDto createProduct(@RequestBody GenericProductDto genericProductDto){ //from Request Body pick the JSON obj and map with GenericProductDto obj
+        return productService.createProduct(genericProductDto);
     }
 
     public void updateProductById(){
