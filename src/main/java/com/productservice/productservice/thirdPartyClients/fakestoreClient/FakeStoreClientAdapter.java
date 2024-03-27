@@ -3,6 +3,7 @@ package com.productservice.productservice.thirdPartyClients.fakestoreClient;
 import com.productservice.productservice.dtos.FakeStoreProductDto;
 import com.productservice.productservice.dtos.GenericProductDto;
 import com.productservice.productservice.exceptions.ProductNotFoundException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,21 @@ import java.util.List;
 public class FakeStoreClientAdapter {
 
     private RestTemplateBuilder restTemplateBuilder;
-    private String specificProductUrl = "https://fakestoreapi.com/products/{id}";
-    private String genericProductUrl = "https://fakestoreapi.com/products";
 
-    public FakeStoreClientAdapter(RestTemplateBuilder restTemplateBuilder) {
+    @Value("${fakestore.api.url}")
+    private String fakeStoreUrl;
+
+    @Value("${fakestore.api.paths.products}")
+    private String pathForProducts;
+    private String specificProductUrl;
+    private String genericProductUrl;
+
+    public FakeStoreClientAdapter(RestTemplateBuilder restTemplateBuilder,
+                                  @Value("${fakestore.api.url}") String fakeStoreUrl,
+                                  @Value("${fakestore.api.paths.products}") String pathForProducts) {
         this.restTemplateBuilder = restTemplateBuilder;
+        this.specificProductUrl = fakeStoreUrl + pathForProducts + "/{id}";
+        this.genericProductUrl = fakeStoreUrl + pathForProducts;
     }
 
     public FakeStoreProductDto getProductById(Long id) throws ProductNotFoundException {
@@ -65,7 +76,7 @@ public class FakeStoreClientAdapter {
                 restTemplate.postForEntity(genericProductUrl, genericProductDto, FakeStoreProductDto.class);
         return responseEntity.getBody();
     }
-    
+
     public FakeStoreProductDto updateProductById(GenericProductDto genericProductDto, Long id) {
         // To Be Implemented
         return null;
