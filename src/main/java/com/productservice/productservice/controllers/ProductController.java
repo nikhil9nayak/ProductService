@@ -31,8 +31,8 @@ public class ProductController { //this controller will contain all the API rela
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProductById(){
-
+    public GenericProductDto deleteProductById(@PathVariable("id") Long id){
+        return productService.deleteProductById(id);
     }
 
     @PostMapping
@@ -40,8 +40,9 @@ public class ProductController { //this controller will contain all the API rela
         return productService.createProduct(genericProductDto);
     }
 
-    public void updateProductById(){
-
+    @PutMapping("/id")
+    public GenericProductDto updateProductById(@RequestBody GenericProductDto genericProductDto, @PathVariable("id") Long id){
+        return productService.updateProductById(genericProductDto, id);
     }
 }
 
