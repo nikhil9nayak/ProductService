@@ -1,7 +1,9 @@
 package com.productservice.productservice.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,12 +13,16 @@ import lombok.Setter;
 public class Product extends BaseModel{
     private String title;
     private String description;
-    private int price;
     private String image;
 
     // Category is not a primitive attribute, It's a relation.
-    @ManyToOne // We are specifying the Cardinality between Product and Category is M:1. Hibernate add a foreign key column in the Product table that references the primary key of the Category table. the foreign key name will be "category_id"
+    @ManyToOne(optional = false) // We are specifying the Cardinality between Product and Category is M:1. Hibernate add a foreign key column in the Product table that references the primary key of the Category table. the foreign key name will be "category_id"
+    @JoinColumn(nullable = false)
     private Category category;
+
+    @OneToOne(optional = false)
+    @JoinColumn(nullable = false)
+    private Price price;
 }
 
 /*
