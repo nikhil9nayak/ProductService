@@ -137,7 +137,6 @@ public class ProductServiceApplication implements CommandLineRunner {
         Price price = new Price();
         price.setCurrency("INR");
         price.setValue(10000);
-        Price savedPrice = priceRepository.save(price);
 
         Category category = new Category();
         category.setName("Apple Devices");
@@ -146,8 +145,11 @@ public class ProductServiceApplication implements CommandLineRunner {
         Product product = new Product();
         product.setTitle("iphone 15 pro");
         product.setDescription("Best iphone");
+        product.setImage("IMG");
         product.setCategory(savedCategory);
-        product.setPrice(savedPrice);
+        product.setPrice(price);
         Product savedProduct = productRepository.save(product);
+
+//        productRepository.deleteById(UUID.fromString("a8de0555-f594-4e5c-b8f9-50e3b4afc84e"));
     }
 }
