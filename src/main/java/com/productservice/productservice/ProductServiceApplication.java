@@ -152,6 +152,6 @@ public class ProductServiceApplication implements CommandLineRunner {
 
 //        productRepository.deleteById(UUID.fromString("a8de0555-f594-4e5c-b8f9-50e3b4afc84e"));
 
-        List<Product> products = productRepository.findAllByPrice_ValueBetween(100, 200);
+//        List<Product> products = productRepository.findAllByPrice_ValueBetween(100, 200);
     }
 }
