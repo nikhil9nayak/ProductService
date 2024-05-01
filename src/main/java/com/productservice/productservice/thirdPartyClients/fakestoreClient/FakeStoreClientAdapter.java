@@ -45,7 +45,7 @@ public class FakeStoreClientAdapter {
         // Exception Handling
         FakeStoreProductDto fakeStoreProductDto = responseEntity.getBody();
         if(fakeStoreProductDto == null){
-            //throw exception
+            // If obj is null then throw exception
             throw new ProductNotFoundException("Product with Id : "+id+" doesn't exists.");
         }
         // Convert FakeStoreProductDto to GenericProductDto before return

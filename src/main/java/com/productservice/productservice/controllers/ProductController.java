@@ -15,7 +15,7 @@ public class ProductController { //this controller will contain all the API rela
     private ProductService productService;
 
     // Constructor Injection
-    ProductController(@Qualifier("selfProductServiceImpl") ProductService productService){ //@Qualifier used to specify the bean name when we have two or more beans configured for the same type ProductService
+    ProductController(ProductService productService){ //@Qualifier used to specify the bean name when we have two or more beans configured for the same type ProductService
         this.productService = productService;
     }
 
