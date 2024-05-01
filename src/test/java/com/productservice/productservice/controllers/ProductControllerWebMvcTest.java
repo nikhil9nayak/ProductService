@@ -1,25 +1,24 @@
 package com.productservice.productservice.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.productservice.productservice.dtos.GenericProductDto;
 import com.productservice.productservice.services.ProductService;
-import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductController.class)
 public class ProductControllerWebMvcTest {
@@ -63,8 +62,8 @@ public class ProductControllerWebMvcTest {
     @Test
     void createProduct() throws Exception {
         GenericProductDto genericProductDto = new GenericProductDto();
-        genericProductDto.setTitle("MacBook");
-        genericProductDto.setPrice(10000L);
+        genericProductDto.setTitle("Macbook");
+        genericProductDto.setPrice(200000L);
         genericProductDto.setDescription("Fastest PC");
         genericProductDto.setCategory("Laptop");
 
@@ -75,13 +74,16 @@ public class ProductControllerWebMvcTest {
         outputGenericProductDto.setCategory(genericProductDto.getCategory());
         outputGenericProductDto.setId(1000L);
 
-        when(productService.createProduct(genericProductDto)).thenReturn(outputGenericProductDto);
+        when(productService.createProduct(any())).thenReturn(outputGenericProductDto);
 
         mockMvc.perform(post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(genericProductDto)))
                 .andExpect(content().string(objectMapper.writeValueAsString(outputGenericProductDto)))
-                .andExpect(status().is(200));
+                .andExpect(status().is(200))
+                .andExpect(content().string(objectMapper.writeValueAsString(outputGenericProductDto)))
+                .andExpect(jsonPath("$.title", is("Macbook")))
+                .andExpect(jsonPath("$.price", is(200000)));
     }
 
 }
