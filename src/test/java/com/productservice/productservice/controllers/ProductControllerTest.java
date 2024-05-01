@@ -48,7 +48,7 @@ public class ProductControllerTest {
 
     @Test
     void testGetProductByIdMocking() throws ProductNotFoundException {
-        when(productServiceMock.getProductById(100L)).thenReturn(null); // Telling Mockito, return "null" whenever getProductById is called with argument "100L"
+        when(productServiceMock.getProductById(100L)).thenReturn(null); // This is Mocking. We're Telling Mockito, return "null" whenever getProductById is called with argument "100L"
         GenericProductDto output = productController.getProductById(100L); // We actually calling getProductById() with "100L", and it won't call the Db instead It will return "null" as we hardcoded "null" for argument "100L"
         assertEquals(null, output); // at last, we assert that the returned output matches the expected value.
     }
