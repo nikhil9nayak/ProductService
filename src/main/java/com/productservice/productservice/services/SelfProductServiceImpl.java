@@ -23,7 +23,7 @@ public class SelfProductServiceImpl implements ProductService{
     }
 
     @Override
-    public GenericProductDto getProductById(Long id) throws ProductNotFoundException {
+    public GenericProductDto getProductById(String authToken, Long id) throws ProductNotFoundException {
         // Make a DB call and get the products with given Id
         GenericProductDto genericProductDto = new GenericProductDto();
         Optional<Product> optionalProduct = productRepository.findById(UUID.fromString("2819d332-a1fa-4284-8a7e-36a00ccfc82e"));

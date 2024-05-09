@@ -4,6 +4,7 @@ import com.productservice.productservice.dtos.GenericProductDto;
 import com.productservice.productservice.exceptions.ProductNotFoundException;
 import com.productservice.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +21,9 @@ public class ProductController { //this controller will contain all the API rela
     }
 
     @GetMapping("/{id}")
-    public GenericProductDto getProductById(@PathVariable("id") Long id) throws ProductNotFoundException { //used to extract the "id" value from the URL
-        return productService.getProductById(id);
+    public GenericProductDto getProductById(@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken, //trying to get the "JWT token" from header
+                                            @PathVariable("id") Long id) throws ProductNotFoundException { //used to extract the "id" value from the URL
+        return productService.getProductById(authToken,id);
     }
 
     @GetMapping
