@@ -14,7 +14,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().authenticated()
+                        .anyRequest().authenticated()  // we use authenticated(), if we need authentication. If we use permitall() then it will permit all api without authenticate
                 )
                 .formLogin(withDefaults())
                 .httpBasic(withDefaults());
