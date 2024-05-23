@@ -16,6 +16,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     List<Product> findAllByTitle(String title); // Get all the products with given title. in background, it will run this sql query "select * from Product where title = ... ;"
 
+    List<Product> findAllByTitleContains(String title);
+
     List<Product> findAllByTitleAndDescription(String title, String desc); // select * from Product where title = ".." and description = ".."
 
     List<Product> findAllByPrice_ValueGreaterThan(Integer x); // select * from product p1_0 left join price p2_0 on p2_0.id=p1_0.price_id where p2_0.value>?

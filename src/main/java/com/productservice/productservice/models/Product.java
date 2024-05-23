@@ -1,5 +1,6 @@
 package com.productservice.productservice.models;
 
+import com.productservice.productservice.dtos.GenericProductDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +24,14 @@ public class Product extends BaseModel{
     @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}) // If we use cascade, If we delete product then it will delete category and price also (first we create price then category then product)
     private Price price;
     private int inventoryCount;
+
+    public GenericProductDto from(Product product){
+        GenericProductDto genericProductDto = new GenericProductDto();
+        genericProductDto.setTitle(product.getTitle());
+        genericProductDto.setDescription(product.getDescription());
+        genericProductDto.setImage(product.getImage());
+        return  genericProductDto;
+    }
 }
 
 /*

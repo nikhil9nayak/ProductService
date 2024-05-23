@@ -1,5 +1,6 @@
 package com.productservice.productservice.dtos;
 
+import com.productservice.productservice.models.Product;
 import lombok.Getter;
 import lombok.Setter;
 
