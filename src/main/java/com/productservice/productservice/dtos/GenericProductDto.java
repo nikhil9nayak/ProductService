@@ -13,4 +13,5 @@ public class GenericProductDto {//this class is giving one more layer of abstrac
     private String category;
     private String description;
     private String image;
+    private int inventoryCount;
 }

@@ -2,8 +2,10 @@ package com.productservice.productservice.services;
 
 import com.productservice.productservice.dtos.GenericProductDto;
 import com.productservice.productservice.models.Product;
+import com.productservice.productservice.models.SortParam;
 import com.productservice.productservice.repositories.ProductRepository;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,9 +19,23 @@ public class SearchService {
         this.productRepository = productRepository;
     }
 
-    public List<GenericProductDto> searchProducts(String query, int pageNumber, int pageSize){
+    public List<GenericProductDto> searchProducts(String query, int pageNumber, int pageSize, List<SortParam> sortParams){
 
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        Sort sort = null;
+        if(sortParams.get(0).getSortType().equals("ASC")){
+            sort = sort.by(sortParams.get(0).getSortParamName()).ascending();
+        } else{
+            sort = sort.by(sortParams.get(0).getSortParamName()).descending();
+        }
+        for(int i=1; i<sortParams.size(); i++){
+            if(sortParams.get(i).getSortType().equals("ASC")){
+                sort.and(Sort.by(sortParams.get(i).getSortParamName())).ascending();
+            }else{
+                sort.and(Sort.by(sortParams.get(i).getSortParamName())).descending();
+            }
+        }
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
 
         List<Product> products = productRepository.findAllByTitleContainingIgnoreCase(query, pageRequest);
         List<GenericProductDto> genericProductDtos = new ArrayList<>();
