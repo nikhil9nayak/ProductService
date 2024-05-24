@@ -7,6 +7,7 @@ import com.productservice.productservice.security.JWTObject;
 import com.productservice.productservice.security.TokenValidator;
 import com.productservice.productservice.thirdPartyClients.fakestoreClient.FakeStoreClientAdapter;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,10 +22,14 @@ public class FakeStoreProductService implements ProductService{
 
     private TokenValidator tokenValidator;
 
+    private RedisTemplate<String, FakeStoreProductDto> redisTemplate;
+
     public FakeStoreProductService(FakeStoreClientAdapter fakeStoreAdapter,
-                                   TokenValidator tokenValidator) {
+                                   TokenValidator tokenValidator,
+                                   RedisTemplate redisTemplate) {
         this.fakeStoreAdapter = fakeStoreAdapter;
         this.tokenValidator = tokenValidator;
+        this.redisTemplate = redisTemplate;
     }
 
     private static GenericProductDto convertToGenericProductDto(FakeStoreProductDto fakeStoreProductDto){ // this is just converting from FakeStoreProductDto to GenericProductDto, giving one more layer of abstraction to FakeStoreProductDto
@@ -52,7 +57,15 @@ public class FakeStoreProductService implements ProductService{
         Long userId = jwtObject.getUserId();
 
         // We are calling fakeStoreAdapter class
-        return convertToGenericProductDto(fakeStoreAdapter.getProductById(id));
+        FakeStoreProductDto fakeStoreProductDto = (FakeStoreProductDto) redisTemplate.opsForHash().get("PRODUCTS", id);
+
+        if(fakeStoreProductDto != null){
+            return convertToGenericProductDto(fakeStoreProductDto);
+        }
+
+        fakeStoreProductDto = fakeStoreAdapter.getProductById(id);
+        redisTemplate.opsForHash().put("PRODUCTS", id, fakeStoreProductDto);
+        return convertToGenericProductDto(fakeStoreProductDto);
     }
 
     @Override
