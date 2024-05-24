@@ -6,11 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(indexName = "products") //this will create a document in ElasticSearch, document is nothing but a table in ElasticSearch
 @Entity // this @ indicating that, "Product" table will be created inside the DB and instances of this class will be mapped to this table
 public class Product extends BaseModel{
     private String title;
